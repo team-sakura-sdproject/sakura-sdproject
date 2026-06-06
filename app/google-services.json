@@ -1,0 +1,30 @@
+{
+  "project_info": {
+    "project_number": "358168725386",
+    "firebase_url": "https://lendlink-6e9e6-default-rtdb.firebaseio.com",
+    "project_id": "lendlink-6e9e6",
+    "storage_bucket": "lendlink-6e9e6.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:358168725386:android:57c2b2d63ea361acae2a73",
+        "android_client_info": {
+          "package_name": "com.lendlink"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBDqcZxJRKU7D8VJfGoALj3XJR5-PKVYHI"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
