@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- Base theme -->
+    <style name="Theme.LendLink" parent="android:Theme.Material.Light.NoActionBar" />
+
+    <!-- Splash screen theme using the Splash Screen API -->
+    <style name="Theme.LendLink.Splash" parent="Theme.SplashScreen">
+        <item name="windowSplashScreenBackground">#29B6F6</item>
+        <item name="windowSplashScreenAnimatedIcon">@drawable/ic_splash_logo</item>
+        <item name="windowSplashScreenAnimationDuration">500</item>
+        <item name="postSplashScreenTheme">@style/Theme.LendLink</item>
+    </style>
+</resources>
