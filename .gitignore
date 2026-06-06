@@ -1,0 +1,17 @@
+# Android Studio / IntelliJ
+.idea/
+.gradle/
+build/
+app/build/
+*.iml
+local.properties
+.kotlin/
+
+# System files
+Captures/
+.externalNativeBuild
+.cxx
+
+*.xlsx
+
+*.xlsx
