@@ -14,7 +14,7 @@ import kotlinx.coroutines.withContext
 import java.util.concurrent.TimeUnit
 
 const val CHANNEL_ID = "lendlink_alerts"
-const val PENALTY_AMOUNT = 1_000L
+const val PENALTY_AMOUNT = 5_000L
 
 class DeadlineCheckWorker(ctx: Context, params: WorkerParameters) : CoroutineWorker(ctx, params) {
     override suspend fun doWork(): Result = withContext(Dispatchers.IO) {
@@ -64,7 +64,8 @@ class PenaltyWorker(ctx: Context, params: WorkerParameters) : CoroutineWorker(ct
             val now = System.currentTimeMillis()
             repo.getAllActive().filter { it.deadline < now && it.status == "active" }.forEach { rec ->
                 // Calculate how many 24-hour periods have passed since the deadline
-                val daysOverdue = (now - rec.deadline) / (24 * 60 * 60 * 1000)
+                // We add 1 to charge the first penalty immediately upon being overdue
+                val daysOverdue = 1 + (now - rec.deadline) / (24 * 60 * 60 * 1000)
                 val expectedTotalPenalty = daysOverdue * PENALTY_AMOUNT
                 val amountToChargeNow = expectedTotalPenalty - rec.penaltyAccrued
 
@@ -85,13 +86,13 @@ object WorkerScheduler {
         try {
             val wm = WorkManager.getInstance(ctx)
             wm.enqueueUniquePeriodicWork("deadline_check",
-                ExistingPeriodicWorkPolicy.KEEP, // Use KEEP to avoid redundant updates on every start
+                ExistingPeriodicWorkPolicy.UPDATE, 
                 PeriodicWorkRequestBuilder<DeadlineCheckWorker>(1, TimeUnit.HOURS)
                     .setConstraints(Constraints.Builder().setRequiredNetworkType(NetworkType.CONNECTED).build())
                     .build())
             wm.enqueueUniquePeriodicWork("penalty_check",
-                ExistingPeriodicWorkPolicy.KEEP,
-                PeriodicWorkRequestBuilder<PenaltyWorker>(24, TimeUnit.HOURS)
+                ExistingPeriodicWorkPolicy.UPDATE,
+                PeriodicWorkRequestBuilder<PenaltyWorker>(1, TimeUnit.HOURS)
                     .setConstraints(Constraints.Builder().setRequiredNetworkType(NetworkType.CONNECTED).build())
                     .build())
         } catch (e: Exception) {
